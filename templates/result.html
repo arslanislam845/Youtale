@@ -7,6 +7,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+  <!-- <link href="styles.css" rel="stylesheet"> -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+  <link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
+  <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/jquery.terminal/js/jquery.terminal.min.js"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/jquery.terminal/css/jquery.terminal.min.css" />
+
+  <script src="https://kit.fontawesome.com/9817a8724c.js" crossorigin="anonymous"></script>
 </head>
 
 <body>
@@ -363,7 +374,7 @@
                     </center>
                       <div class="border-2 borber-gray-500  mx-4 mt-10 px-5 pb-4">
                         <h3 class="mt-5 text-center text-3xl font-bold leading-6 text-gray-900">
-                          Transcript of your vedio is as follows:
+                          Transcript of your video is as follows:
                         </h3>
                         <div
                           class=" my-10  text-xl text-semibold text-gray-500"
@@ -371,13 +382,74 @@
                           {{docs}}
                         </div>
                       </div>
+                      <div class="border-2 borber-gray-500  mx-4 mt-10 px-5 pb-4">
+                        <h3 class="mt-5 text-center text-3xl font-bold leading-6 text-gray-900" id="h3_text">
+                          Summary of your video is as follows:
+                        </h3>
+                        <div
+                          class=" my-10  text-xl text-semibold text-gray-500" id="summary_div"
+                        >
+                          
+                        </div>
+                        <center>
+                            <br>
+
+                            <div><i class="fa fa-refresh fa-spin fa-3x fa-fw " id="summary_load"></i></div>
+                        </center>
+                      </div>
                     </div>
                   </div>
                 </div>
             </main>
         </div>
     </div>
+    <script>
+            $(document).ready(function () {
+            $("#summary_div").hide();
+            $("#summary_load").show();
+            $("#h3_text").html("Getting your Summary Please Wait");
+        $.ajax({
+            url: '/get_summary',
+            data: JSON.stringify({
+                "docs": "{{docs}}",
+            }),
+            contentType: "application/json",
+            type: 'POST',
+            success: function (response) {
+                if (response["status"]=="200"){
+                    $("#h3_text").html("Summary of your video is as follows:");
+                    $("#summary_div").html(response["summary"]);
+                    $("#summary_div").show();
+                    $("#summary_load").hide();
+                    
+                }
+                else{
+                    $("#h3_text").html("Facing issue while getting your summary");
+                    $("#summary_div").html("<p style='color:red;'>We are facing some internal error</p>");
+                    $("#summary_div").show();
+                    $("#summary_load").hide();
 
+                }                            
+                },
+                error: function (error) {
+                    $("#h3_text").html("Facing issue while getting your summary");
+                $("#summary_div").html("<text style='color:red'>It's Look Like you are not connected to the Internet. Or Try Again Latter</text>");
+                    $("#summary_div").show();
+                    $("#summary_load").hide();
+                // $("#error_response").html("<text style='color:red'>It's Look Like you are not connected to the Internet. Or Try Again Latter</text>");
+            }
+        // });
+        
+      });
+      })
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js"
+    integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+    crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js"
+    integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+    crossorigin="anonymous"></script>
 </body>
 
 </html>

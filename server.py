@@ -48,12 +48,12 @@ def submit():
             loader = YoutubeLoader.from_youtube_url(video_url)
             transcript = loader.load()
             
-            text_splitter = RecursiveCharacterTextSplitter(
-                chunk_size=1000, chunk_overlap=0)
-            docs = text_splitter.split_documents(transcript)
-            result = ', '.join([str(doc).split("metadata={'source':")[0][14:-2].replace('[Music]', "" ) for doc in docs])
+            # text_splitter = RecursiveCharacterTextSplitter(
+            #     chunk_size=1000, chunk_overlap=0)
+            # docs = text_splitter.split_documents(transcript)
+            # result = ', '.join([str(doc).split("metadata={'source':")[0][14:-2].replace('[Music]', "" ) for doc in docs])
             
-            return result
+            return transcript
 
         # video_url = "https://www.youtube.com/watch?v=bgiPTUy2RqI"
         # video_url = "https://youtu.be/4xG2aJa6UyY"

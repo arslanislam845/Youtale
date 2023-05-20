@@ -143,13 +143,13 @@ def get_summary():
           docs=request.get_json(force=True)['docs']
           summarizer = pipeline(
               "summarization", model="philschmid/bart-large-cnn-samsum")
-          length=math.ceil(len(docs)/5000)
+          length=math.ceil(len(docs)/4000)
           print("@@@@@@@@",length)
           start_window=0
           end_window=0
           summary=''
           for i in range(0,length):
-            end_window=end_window+5000
+            end_window=end_window+4000
             summary=summarizer(docs[start_window:end_window])[0]['summary_text']+summary
             start_window=end_window
             print(summary)
